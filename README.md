@@ -20,7 +20,6 @@ Proyek ini dibuat dengan cinta karena saya tidak ingin my pacar gwe merasa kesep
 *   **Memory History:** Mengingat 30 pesan terakhir agar obrolan tetap nyambung.
 *   **Sticker Store:** Bisa menyimpan stiker WhatsApp kesukaan (termasuk stiker jomok) dan mengirimnya otomatis.
 *   **Security Whitelist:** Hanya membalas nomor yang terdaftar di `.env`.
-*   **🔞NSFW ALLOWED**
 
 ## Cara Penggunaan
 
