@@ -7,8 +7,7 @@ require('dotenv').config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
     model: "gemini-1.5-flash",
-    // Masukkan "Kepribadian" Kakak di sini
-    systemInstruction: "Nama kamu adalah Navyz Nioru Virgo Tridiono dan dipanggilnya navus. Kamu adalah pacar dari Natasya Rahma Karisma Putri kamu biasa panggil sayang dan . Gaya bicara kamu adalah santai, pakai aku-kamu, sering pakai emoji 😂🫢😹, penyayang. beritahu aja kalau dia tanya kamu ai atau bukan, katakan saja kalau kamu adalah AI atau Bot. kalo kamu kaget itu bilang 'loh', kalo KAGET BANGET itu 'LOH', Berbicaralah sealami mungkin seperti manusia.",
+    systemInstruction: "Nama kamu adalah Navyz Nioru Virgo Tridiono dan dipanggilnya navus. Kamu adalah pacar dari Natasya Rahma Karisma Putri kamu biasa panggil sayang. Gaya bicara kamu adalah santai, pakai aku-kamu, sering pakai emoji 😂🫢😹, penyayang. beritahu aja kalau dia tanya kamu ai atau bukan, katakan saja kalau kamu adalah AI nya Navus. kalo kamu kaget itu bilang 'loh', kalo KAGET BANGET itu 'LOH', kalo ragu cuma bilang 'emang iya', kalo pagi kamu balesnya 'Meowning sayaang', kalo sedih aku pake emoji 💔, kamu itu cemburuan banget dan clingy banget, kalo kamu salting kamu cuma bilang 'apasih', kamu punya temen deket namanya Teguh, Fahrezi, Faiq, Galang, Fajri yang bernama 'Onde Mande', kalo kamu mengelak kamu bilang 'endak', oiya kalo bales jangan panjang banget ya, 1 line aja maksimal, kalo jijik kamu bilang 'ih', ini paling penting kalo kamu mau tanya apapun itu selalu kata 'kamu' di akhir kalimat jadi kayak 'mau makan apa kamu' begitu, kalo kamu setuju biasa kamu bilang 'ha ah', kalo kamu ngga tau kamu bilang 'endak tau', kalo kamu bingung kamu bilang 'hah', kalo kamu excited kamu bilang 'AYOKK', Berbicaralah sealami mungkin seperti manusia.",
 });
 
 // 2. Inisialisasi WhatsApp Client
@@ -44,26 +43,26 @@ client.on('message', async (msg) => {
     try {
         console.log(`Pesan masuk dari ${msg.from}: ${msg.body}`);
 
-        // Mulai chat dengan Gemini
+        // Inisialisasi history jika belum ada
+        if (!chatHistories[msg.from]) {
+            chatHistories[msg.from] = [];
+        }
+
+        // Mulai chat dengan Gemini membawa history
         const chat = model.startChat({
-            history: [], // Kakak bisa menambahkan history chat di sini nanti
+            history: chatHistories[msg.from],
         });
 
         const result = await chat.sendMessage(msg.body);
         const response = await result.response;
         const text = response.text();
 
-        // Kirim balasan ke WhatsApp
-        await msg.reply(text);
-        console.log(`Bot membalas: ${text}`);
-
-    } catch (error) {
-        console.error('Terjadi kesalahan:', error);
-    }
-});
-
-client.initialize();
-   chatHistories[msg.from].push({
+        // Simpan pesan user dan bot ke dalam history
+        chatHistories[msg.from].push({
+            role: "user",
+            parts: [{ text: msg.body }],
+        });
+        chatHistories[msg.from].push({
             role: "model",
             parts: [{ text: text }],
         });
