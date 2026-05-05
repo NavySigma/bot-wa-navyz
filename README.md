@@ -1,9 +1,9 @@
-# Navus Bot - Your Digital Twin
+# Bot Navyz
 
-Bot WhatsApp pribadi yang dirancang khusus dengan kepribadian **Navyz (Navus)** untuk menemani sang kekasih, **Natasya**, agar tidak merasa kesepian saat Navyz sedang beristirahat atau ketiduran.
+Bot WhatsApp pribadi yang dirancang khusus dengan kepribadian **Navyz (Navus)** untuk menemani sang kekasih, **Natasya**, agar tidak merasa kesepian saat sedang beristirahat atau ketiduran.
 
 ## Latar Belakang
-Proyek ini dibuat dengan cinta karena saya tidak ingin my pacar gwe merasa sendirian dan kesepian saat saya pergi berperang (ketiduran). Bot ini hadir sebagai "ma twin" yang memiliki gaya bicara, kepribadian, sampe kebiasaan unik navus, sehingga dia tetap merasa ditemani kapanpun menggunakan kecanggihan Google Gemini AI.
+Proyek ini dibuat dengan cinta karena saya tidak ingin my pacar gwe merasa kesepian saat saya pergi berperang (ketiduran). Bot ini hadir sebagai "ma twin" yang memiliki gaya bicara, kepribadian, sampe kebiasaan unik diriku, sehingga my pacar gwe tetap merasa ditemani kapanpun.
 
 ## Teknologi yang Digunakan
 *   **Engine:** Node.js (Runtime JavaScript).
@@ -37,10 +37,10 @@ npm install whatsapp-web.js qrcode-terminal @google/generative-ai dotenv
 ### 3. Konfigurasi API & Nomor (.env)
 Buat file bernama `.env` di folder utama dan isi seperti ini:
 ```env
-GEMINI_API_KEY=MASUKKAN_API_KEY_DISINI
-# Masukkan nomor HP Anda (jika lebih dari 1 pisahkan dengan koma)
-# Gunakan format @lid jika muncul di terminal
-ALLOWED_NUMBERS=628xxxxxx@c.us,628xxxxxx@c.us
+GEMINI_API_KEY={API GEMINI KAMU}
+# Pisahkan nomor dengan koma jika lebih dari satu
+# Format: 62 + nomer hp kamu + @c.us
+TARGET_PHONE_NUMBER=6285********@c.us,6285********@c.us
 ```
 
 ### 4. Menjalankan Bot
