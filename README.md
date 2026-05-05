@@ -38,9 +38,8 @@ npm install whatsapp-web.js qrcode-terminal @google/generative-ai dotenv
 Buat file bernama `.env` di folder utama dan isi seperti ini:
 ```env
 GEMINI_API_KEY={API GEMINI KAMU}
-# Pisahkan nomor dengan koma jika lebih dari satu
-# Format: 62 + nomer hp kamu + @c.us
-TARGET_PHONE_NUMBER=6285********@c.us,6285********@c.us
+# NAMA DI SETTINGAN WA BUKAN NAMA SAVE
+TARGET_PHONE_NUMBER={NAMA DI SETTINGAN WA}
 ```
 
 ### 4. Menjalankan Bot
@@ -48,7 +47,7 @@ TARGET_PHONE_NUMBER=6285********@c.us,6285********@c.us
 node index.js
 ```
 *   Tunggu sampai QR Code muncul.
-*   Scan pakai WhatsApp nomor yang mau dijadikan bot (**085142506345**).
+*   Scan pakai WhatsApp nomor yang mau dijadikan bot contoh (**085142506345**).
 *   Jika muncul tulisan `Bot sudah siap dan online!`, berarti Navus sudah redy.
 
 ### 5. Cara Ajarin Stiker
