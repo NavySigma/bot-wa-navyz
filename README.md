@@ -16,10 +16,11 @@ Proyek ini dibuat dengan cinta karena saya tidak ingin my pacar gwe merasa kesep
 
 ## Fitur Utama
 *   **Hybrid Model System:** Otomatis pindah ke model cadangan (Lite) jika model utama terkena limit (Error 429).
-*   **Personality Sync:** Mengikuti instruksi gaya bicara Navus (cuek tapi sayang, cemburuan, clingy, dan jarang emoji).
-*   **Memory History:** Mengingat 20 pesan terakhir agar obrolan tetap nyambung.
+*   **Personality Sync:** Mengikuti instruksi gaya bicara Navus (sedikit cuek tapi sayang, cemburuan, clingy, dan sering emoji).
+*   **Memory History:** Mengingat 30 pesan terakhir agar obrolan tetap nyambung.
 *   **Sticker Store:** Bisa menyimpan stiker WhatsApp kesukaan (termasuk stiker jomok) dan mengirimnya otomatis.
 *   **Security Whitelist:** Hanya membalas nomor yang terdaftar di `.env`.
+*   **🔞NSFW ALLOWED**
 
 ## Cara Penggunaan
 
