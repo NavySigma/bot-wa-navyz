@@ -1,5 +1,6 @@
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+const qrcodeTerminal = require('qrcode-terminal');
+const QRCode = require('qrcode');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 require('dotenv').config();
@@ -40,8 +41,18 @@ function getStickers() {
 }
 
 client.on('qr', (qr) => {
-    console.log('Scan QR Code ini:');
-    qrcode.generate(qr, { small: true });
+    console.log('--- SCAN QR CODE DI BAWAH INI ---');
+    
+    // Opsi 1: QR Code Terminal (Default)
+    qrcodeTerminal.generate(qr, { small: true });
+
+    // Opsi 2: Link untuk generate QR di luar (Jika Log HF berantakan)
+    console.log('Jika QR di atas berantakan, buka link ini untuk scan:');
+    console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
+    
+    // Opsi 3: String Data (Hanya untuk cadangan terakhir)
+    console.log('Raw QR Data:', qr);
+    console.log('---------------------------------');
 });
 
 client.on('ready', () => {
