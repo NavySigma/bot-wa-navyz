@@ -17,7 +17,18 @@ const client = new Client({
     puppeteer: {
         handleSIGINT: false,
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        args: [
+            '--no-sandbox', 
+            '--disable-setuid-sandbox', 
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process', // Berguna untuk menghemat RAM di container
+            '--disable-gpu'
+        ],
+        authTimeoutMs: 0, // Matikan timeout untuk auth
+        navigationTimeout: 60000, // Tambah timeout jadi 60 detik (default 30 detik)
     }
 });
 
