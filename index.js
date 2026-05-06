@@ -127,9 +127,10 @@ client.on('message', async (msg) => {
             const chat = primaryModel.startChat({ history: historyData });
             result = await chat.sendMessage(msg.body);
         } catch (error) {
-            if (error.status === 429) {
+            // Cek apakah error karena rate limit (429) atau server sibuk (503/500)
+            if (error.status === 429 || error.status === 503 || error.status === 500) {
                 usedModel = "CADANGAN (Lite)";
-                console.log("⚠️ Model Utama limit! Mencoba model Cadangan (Lite)...");
+                console.log(`⚠️ Model Utama bermasalah (Status: ${error.status})! Mencoba model Cadangan (Lite)...`);
                 const chatLite = secondaryModel.startChat({ history: historyData });
                 result = await chatLite.sendMessage(msg.body);
             } else {
