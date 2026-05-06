@@ -33,17 +33,28 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-    console.log('Bot sudah siap dan online!');
+    console.log('Bot sudah siap and online!');
+});
+
+// LOG SUPER SENSITIF: Untuk cek apakah ada aktivitas pesan sama sekali
+client.on('message_create', async (msg) => {
+    // Abaikan pesan dari bot itu sendiri agar tidak spam
+    if (msg.fromMe) return;
+
+    console.log(`[AKTIVITAS] Terdeteksi pesan masuk dari ${msg.from}`);
+    console.log(" ");
 });
 
 client.on('message', async (msg) => {
+
     try {
         const contact = await msg.getContact();
         const senderName = contact.pushname || "";
         const senderNumber = contact.number || "";
         const senderId = msg.from;
 
-        console.log(`[LOG] Chat masuk dari: ${senderName} (${senderNumber})`);
+        console.log(`[LOG] Chat masuk dari: ${senderName} (${senderNumber}) | Isi: ${msg.body}`);
+        console.log(" ");
 
         // Ambil daftar nama yang diizinkan dari .env
         const allowedNames = (process.env.ALLOWED_NAMES || "").split(',').map(n => n.trim().toLowerCase());
@@ -135,4 +146,5 @@ client.on('message', async (msg) => {
     }
 });
 
+console.log('Sedang menghubungkan ke WhatsApp...');
 client.initialize();
