@@ -1,3 +1,12 @@
+---
+title: Bot Navyz
+emoji: ❤️
+colorFrom: pink
+colorTo: red
+sdk: docker
+pinned: false
+---
+
 # Bot Navyz
 
 Bot WhatsApp pribadi yang dirancang khusus dengan kepribadian **Navyz (Navus)** untuk menemani sang kekasih, **Natasya**, agar tidak merasa kesepian saat sedang beristirahat atau ketiduran.
