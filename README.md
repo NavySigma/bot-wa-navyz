@@ -20,46 +20,36 @@ Proyek ini dibuat dengan cinta karena saya tidak ingin my pacar gwe merasa kesep
 *   **AI Brain:** `Google Gemini AI` (Menggunakan SDK `@google/generative-ai`).
 *   **Models:** 
     *   **Primary:** `gemini-flash-latest` (Cepat dan Pintar).
-    *   **Fallback:** `gemini-flash-lite-latest` (Cadangan otomatis jika kuota utama limit).
+    *   **Fallback:** `gemini-flash-lite-latest` (Cadangan otomatis jika kuota utama limit atau server sibuk).
 *   **Storage:** File System (JSON) untuk menyimpan history chat dan data stiker.
 
 ## Fitur Utama
-*   **Hybrid Model System:** Otomatis pindah ke model cadangan (Lite) jika model utama terkena limit (Error 429).
+*   **Hybrid Model System:** Otomatis pindah ke model cadangan (Lite) jika model utama terkena limit atau server sibuk (Error 429/503).
 *   **Personality Sync:** Mengikuti instruksi gaya bicara Navus (sedikit cuek tapi sayang, cemburuan, clingy, dan sering emoji).
-*   **Memory History:** Mengingat 30 pesan terakhir agar obrolan tetap nyambung.
-*   **Sticker Store:** Bisa menyimpan stiker WhatsApp kesukaan (termasuk stiker jomok) dan mengirimnya otomatis.
-*   **Security Whitelist:** Hanya membalas nomor yang terdaftar di `.env`.
+*   **Memory History:** Mengingat 20 pesan terakhir agar obrolan tetap nyambung.
+*   **Sticker Store:** Bisa menyimpan stiker WhatsApp kesukaan dan mengirimnya otomatis.
+*   **Security Whitelist:** Hanya membalas nama WhatsApp yang terdaftar di environment.
 
-## Cara Penggunaan
+## Cara Penggunaan (Hugging Face Deployment)
 
-### 1. Persiapan Lingkungan
-Pastikan komputer Kakak sudah terpasang:
-*   [Node.js](https://nodejs.org/) (Versi terbaru sangat disarankan).
-*   Google Gemini API Key (Bisa didapat di [Google AI Studio](https://aistudio.google.com/)).
+### 1. Persiapan Space
+*   Buat Space baru di Hugging Face dengan SDK **Docker**.
+*   Upload semua file proyek ini (kecuali `node_modules` dan `.env`).
 
-### 2. Instalasi Package
-Buka terminal di folder proyek ini dan jalankan perintah berikut untuk menginstal semua library yang dibutuhkan:
-```bash
-npm install whatsapp-web.js qrcode-terminal @google/generative-ai dotenv
-```
+### 2. Konfigurasi Secrets (PENTING)
+Buka tab **Settings** > **Variables and secrets** di Space kamu, lalu tambahkan:
+*   `GEMINI_API_KEY`: Kunci API Gemini kamu.
+*   `ALLOWED_NAMES`: Daftar nama WhatsApp yang diizinkan (misal: `SIGMA, Natasya`).
+*   `PAIRING_NUMBER`: Nomor HP bot kamu (contoh: `6285142506345`).
 
-### 3. Konfigurasi API & Nomor (.env)
-Buat file bernama `.env` di folder utama dan isi seperti ini:
-```env
-GEMINI_API_KEY={API GEMINI KAMU}
-# NAMA DI SETTINGAN WA BUKAN NAMA SAVE
-TARGET_PHONE_NUMBER={NAMA DI SETTINGAN WA}
-```
+### 3. Menghubungkan WhatsApp (Pairing Code)
+*   Buka tab **Logs** di Space kamu.
+*   Tunggu sampai muncul **KODE TAUTAN ANDA** (8 digit).
+*   Buka WhatsApp di HP > Perangkat Tertaut > Tautkan Perangkat.
+*   Pilih **"Tautkan dengan nomor telepon saja"**.
+*   Masukkan kode 8 digit yang muncul di Logs.
 
-### 4. Menjalankan Bot
-```bash
-node index.js
-```
-*   Tunggu sampai QR Code muncul.
-*   Scan pakai WhatsApp nomor yang mau dijadikan bot contoh (**085142506345**).
-*   Jika muncul tulisan `Bot sudah siap dan online!`, berarti Navus sudah redy.
-
-### 5. Cara Ajarin Stiker
+### 4. Cara Simpan Stiker
 Cukup kirim stiker di WhatsApp, lalu **Reply/Balas** stiker tersebut dengan mengetik:
 `!simpan [nama_stiker]`
 *Contoh: !simpan jomok*
