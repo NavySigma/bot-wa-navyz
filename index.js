@@ -40,17 +40,32 @@ function getStickers() {
     return JSON.parse(fs.readFileSync(STICKER_FILE, 'utf8'));
 }
 
-client.on('qr', (qr) => {
-    console.log('--- SCAN QR CODE DI BAWAH INI ---');
+client.on('qr', async (qr) => {
+    console.log('--- LOGIN METHOD: QR CODE ---');
     
-    // Opsi 1: QR Code Terminal (Default)
+    // Opsi 1: QR Code Terminal
     qrcodeTerminal.generate(qr, { small: true });
 
-    // Opsi 2: Link untuk generate QR di luar (Jika Log HF berantakan)
-    console.log('Jika QR di atas berantakan, buka link ini untuk scan:');
+    // Opsi 2: Link untuk generate QR di luar
+    console.log('Link QR (Jika berantakan):');
     console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
     
-    // Opsi 3: String Data (Hanya untuk cadangan terakhir)
+    // --- FITUR BARU: PAIRING CODE (TAUTKAN NOMOR) ---
+    if (process.env.PAIRING_NUMBER) {
+        try {
+            const pairingCode = await client.requestPairingCode(process.env.PAIRING_NUMBER.replace(/\D/g, ''));
+            console.log(' ');
+            console.log('=========================================');
+            console.log('--- LOGIN METHOD: PAIRING CODE ---');
+            console.log(`KODE TAUTAN ANDA: ${pairingCode}`);
+            console.log('=========================================');
+            console.log('Buka WA > Perangkat Tertaut > Tautkan Perangkat > Tautkan dengan nomor telepon');
+            console.log(' ');
+        } catch (err) {
+            console.error('Gagal mengambil Pairing Code:', err);
+        }
+    }
+
     console.log('Raw QR Data:', qr);
     console.log('---------------------------------');
 });
