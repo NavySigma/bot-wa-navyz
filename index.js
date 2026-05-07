@@ -45,30 +45,40 @@ function getStickers() {
 let pairingCodeSent = false;
 
 client.on('qr', async (qr) => {
-    console.log('--- LOGIN METHOD: QR CODE ---');
-    qrcodeTerminal.generate(qr, { small: true });
-    console.log('Link QR (Jika berantakan):');
-    console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
-    
+    // QR Code diabaikan karena kita menggunakan Pairing Code
     if (process.env.PAIRING_NUMBER && !pairingCodeSent) {
         pairingCodeSent = true;
-        console.log(`[SYSTEM] Menyiapkan Pairing Code untuk: ${process.env.PAIRING_NUMBER}...`);
+        console.log(' ');
+        console.log('--- PROSES LOGIN: PAIRING CODE ---');
+        console.log(`[SYSTEM] Meminta kode untuk nomor: ${process.env.PAIRING_NUMBER}`);
         
-        // Jeda 5 detik agar halaman stabil
+        // Jeda agar browser benar-benar siap
         setTimeout(async () => {
             try {
                 const pairingCode = await client.requestPairingCode(process.env.PAIRING_NUMBER.replace(/\D/g, ''));
                 console.log(' ');
                 console.log('=========================================');
-                console.log('KODE TAUTAN ANDA: ' + pairingCode);
+                console.log('      KODE TAUTAN ANDA: ' + pairingCode);
                 console.log('=========================================');
-                console.log('Buka WA > Perangkat Tertaut > Tautkan Perangkat > Tautkan dengan nomor telepon');
+                console.log('Instruksi:');
+                console.log('1. Buka WhatsApp di HP');
+                console.log('2. Klik Perangkat Tertaut');
+                console.log('3. Klik Tautkan Perangkat');
+                console.log('4. Pilih "Tautkan dengan nomor telepon saja"');
+                console.log('5. Masukkan kode 8 digit di atas');
+                console.log('=========================================');
                 console.log(' ');
             } catch (err) {
-                console.log('[ERROR] Gagal generate Pairing Code:', err.message);
-                pairingCodeSent = false; // Reset agar bisa coba lagi jika gagal
+                console.log('[ERROR] Gagal mendapatkan Pairing Code:', err.message);
+                pairingCodeSent = false;
             }
         }, 5000);
+    } else if (!process.env.PAIRING_NUMBER) {
+        console.log(' ');
+        console.log('!!! PERINGATAN !!!');
+        console.log('Variabel PAIRING_NUMBER tidak ditemukan.');
+        console.log('Harap masukkan nomor HP di Settings > Secrets agar kode muncul.');
+        console.log(' ');
     }
 });
 
