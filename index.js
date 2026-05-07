@@ -25,11 +25,13 @@ const client = new Client({
             '--disable-accelerated-2d-canvas',
             '--no-first-run',
             '--no-zygote',
-            '--single-process', // Berguna untuk menghemat RAM di container
-            '--disable-gpu'
+            '--disable-gpu',
+            '--hide-scrollbars',
+            '--disable-notifications',
+            '--disable-extensions'
         ],
-        authTimeoutMs: 0, // Matikan timeout untuk auth
-        navigationTimeout: 60000, // Tambah timeout jadi 60 detik (default 30 detik)
+        authTimeoutMs: 0,
+        navigationTimeout: 60000,
     }
 });
 
@@ -40,30 +42,33 @@ function getStickers() {
     return JSON.parse(fs.readFileSync(STICKER_FILE, 'utf8'));
 }
 
+let pairingCodeSent = false;
+
 client.on('qr', async (qr) => {
     console.log('--- LOGIN METHOD: QR CODE ---');
     qrcodeTerminal.generate(qr, { small: true });
     console.log('Link QR (Jika berantakan):');
     console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
     
-    // Debug: Cek apakah variabel terbaca
-    if (process.env.PAIRING_NUMBER) {
-        console.log(`[SYSTEM] Mencoba generate Pairing Code untuk nomor: ${process.env.PAIRING_NUMBER}`);
-        try {
-            // Tunggu sebentar agar browser siap
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            const pairingCode = await client.requestPairingCode(process.env.PAIRING_NUMBER.replace(/\D/g, ''));
-            console.log(' ');
-            console.log('=========================================');
-            console.log('KODE TAUTAN ANDA: ' + pairingCode);
-            console.log('=========================================');
-            console.log('Buka WA > Perangkat Tertaut > Tautkan Perangkat > Tautkan dengan nomor telepon');
-            console.log(' ');
-        } catch (err) {
-            console.log('[ERROR] Gagal generate Pairing Code:', err.message);
-        }
-    } else {
-        console.log('[SYSTEM] PAIRING_NUMBER tidak ditemukan di environment variables.');
+    if (process.env.PAIRING_NUMBER && !pairingCodeSent) {
+        pairingCodeSent = true;
+        console.log(`[SYSTEM] Menyiapkan Pairing Code untuk: ${process.env.PAIRING_NUMBER}...`);
+        
+        // Jeda 5 detik agar halaman stabil
+        setTimeout(async () => {
+            try {
+                const pairingCode = await client.requestPairingCode(process.env.PAIRING_NUMBER.replace(/\D/g, ''));
+                console.log(' ');
+                console.log('=========================================');
+                console.log('KODE TAUTAN ANDA: ' + pairingCode);
+                console.log('=========================================');
+                console.log('Buka WA > Perangkat Tertaut > Tautkan Perangkat > Tautkan dengan nomor telepon');
+                console.log(' ');
+            } catch (err) {
+                console.log('[ERROR] Gagal generate Pairing Code:', err.message);
+                pairingCodeSent = false; // Reset agar bisa coba lagi jika gagal
+            }
+        }, 5000);
     }
 });
 
