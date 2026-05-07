@@ -42,32 +42,29 @@ function getStickers() {
 
 client.on('qr', async (qr) => {
     console.log('--- LOGIN METHOD: QR CODE ---');
-    
-    // Opsi 1: QR Code Terminal
     qrcodeTerminal.generate(qr, { small: true });
-
-    // Opsi 2: Link untuk generate QR di luar
     console.log('Link QR (Jika berantakan):');
     console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
     
-    // --- FITUR BARU: PAIRING CODE (TAUTKAN NOMOR) ---
+    // Debug: Cek apakah variabel terbaca
     if (process.env.PAIRING_NUMBER) {
+        console.log(`[SYSTEM] Mencoba generate Pairing Code untuk nomor: ${process.env.PAIRING_NUMBER}`);
         try {
+            // Tunggu sebentar agar browser siap
+            await new Promise(resolve => setTimeout(resolve, 3000));
             const pairingCode = await client.requestPairingCode(process.env.PAIRING_NUMBER.replace(/\D/g, ''));
             console.log(' ');
             console.log('=========================================');
-            console.log('--- LOGIN METHOD: PAIRING CODE ---');
-            console.log(`KODE TAUTAN ANDA: ${pairingCode}`);
+            console.log('KODE TAUTAN ANDA: ' + pairingCode);
             console.log('=========================================');
             console.log('Buka WA > Perangkat Tertaut > Tautkan Perangkat > Tautkan dengan nomor telepon');
             console.log(' ');
         } catch (err) {
-            console.error('Gagal mengambil Pairing Code:', err);
+            console.log('[ERROR] Gagal generate Pairing Code:', err.message);
         }
+    } else {
+        console.log('[SYSTEM] PAIRING_NUMBER tidak ditemukan di environment variables.');
     }
-
-    console.log('Raw QR Data:', qr);
-    console.log('---------------------------------');
 });
 
 client.on('ready', () => {
