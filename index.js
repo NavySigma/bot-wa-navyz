@@ -188,4 +188,12 @@ client.on('message', async (msg) => {
 });
 
 console.log('Sedang menghubungkan ke WhatsApp...');
+
+// Cek status pairing number saat startup
+if (process.env.PAIRING_NUMBER) {
+    console.log(`[INIT] PAIRING_NUMBER terdeteksi: ${process.env.PAIRING_NUMBER}`);
+} else {
+    console.log('[INIT] PAIRING_NUMBER tidak ditemukan. Pastikan sudah input di Secrets.');
+}
+
 client.initialize();
